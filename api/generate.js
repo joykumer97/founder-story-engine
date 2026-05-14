@@ -17,9 +17,16 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
-        messages: [{ role: "user", content: prompt }],
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert LinkedIn ghostwriter for founders. Always respond with valid JSON only. No markdown, no backticks, no extra text before or after the JSON."
+          },
+          { role: "user", content: prompt }
+        ],
         temperature: 0.8,
-        max_tokens: 1500
+        max_tokens: 1500,
+        response_format: { type: "json_object" }
       })
     });
 
