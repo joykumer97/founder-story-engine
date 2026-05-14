@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Founder Story Engine — Turn your startup updates into viral LinkedIn posts</title>
+<meta name="description" content="Paste a raw startup update. Get 3 LinkedIn posts instantly — a story hook, a lessons thread, and a behind-the-scenes reveal. Built for founders.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0F0E0C;
+    --ink2: #5A5750;
+    --ink3: #9E9B96;
+    --bg: #F8F5EF;
+    --surface: #FFFFFF;
+    --border: rgba(15,14,12,0.12);
+    --border2: rgba(15,14,12,0.22);
+    --accent: #1A4A8A;
+    --accent-bg: #EBF1FA;
+    --green: #14532D;
+    --green-bg: #ECFDF5;
+    --amber: #78350F;
+    --amber-bg: #FFFBEB;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  html { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--ink); background: var(--bg); }
+  body { min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--ink); letter-spacing: -0.3px; }
+  .logo span { color: var(--accent); }
+  .nav-badge {
+    font-size: 12px; font-weight: 500; letter-spacing: .03em;
+    background: var(--accent-bg); color: var(--accent);
+    padding: 4px 12px; border-radius: 999px;
+    border: 1px solid rgba(26,74,138,.15);
+  }
+
+  /* HERO */
+  .hero {
+    max-width: 640px; margin: 0 auto;
+    padding: 4rem 1.5rem 2.5rem;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink3); margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.15; letter-spacing: -0.5px;
+    color: var(--ink); margin-bottom: 1rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p {
+    font-size: 16px; font-weight: 300; line-height: 1.7;
+    color: var(--ink2); max-width: 480px; margin: 0 auto 2rem;
+  }
+  .hero-formats {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 0;
+  }
+  .format-pill {
+    font-size: 12px; font-weight: 500; padding: 5px 14px;
+    border-radius: 999px; border: 1px solid var(--border2);
+    background: var(--surface); color: var(--ink2);
+  }
+
+  /* MAIN */
+  main { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  /* CARD */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* STEP */
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--ink); color: var(--bg);
+    font-size: 11px; font-weight: 500; margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .step-row { display: flex; align-items: center; margin-bottom: 12px; }
+  .step-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .step-hint { font-size: 13px; color: var(--ink3); margin-left: auto; }
+
+  textarea {
+    width: 100%; padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+    line-height: 1.7; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); resize: vertical;
+    transition: border-color .15s;
+  }
+  textarea:focus { outline: none; border-color: var(--border2); }
+  textarea::placeholder { color: var(--ink3); }
+
+  .char-row { display: flex; justify-content: space-between; margin-top: 6px; }
+  .char-hint { font-size: 12px; color: var(--ink3); }
+
+  /* CHIPS */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 16px; font-size: 13px; font-weight: 400;
+    border: 1px solid var(--border); border-radius: 999px;
+    background: var(--bg); color: var(--ink2);
+    cursor: pointer; transition: all .15s;
+  }
+  .chip:hover { border-color: var(--border2); color: var(--ink); }
+  .chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* GENERATE BTN */
+  .gen-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 14px;
+    background: var(--ink); color: var(--bg);
+    border: none; border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+    cursor: pointer; transition: opacity .15s; margin-top: .25rem;
+  }
+  .gen-btn:hover { opacity: .85; }
+  .gen-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .spin { display: inline-block; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* RESULTS */
+  .results { margin-top: 2rem; }
+  .results-header { font-size: 13px; font-weight: 500; color: var(--ink3); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: .05em; }
+  .post-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.25rem 1.5rem;
+    margin-bottom: 12px;
+    animation: fadeUp .3s ease both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .post-card:nth-child(2) { animation-delay: .1s; }
+  .post-card:nth-child(3) { animation-delay: .2s; }
+
+  .post-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .badge { font-size: 11px; font-weight: 500; padding: 4px 12px; border-radius: 999px; }
+  .b-story { background: var(--accent-bg); color: var(--accent); }
+  .b-lesson { background: var(--green-bg); color: var(--green); }
+  .b-behind { background: var(--amber-bg); color: var(--amber); }
+
+  .copy-btn {
+    display: flex; align-items: center; gap: 5px;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+    color: var(--ink2); background: var(--bg);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 5px 12px; cursor: pointer; transition: all .12s;
+  }
+  .copy-btn:hover { border-color: var(--border2); color: var(--ink); }
+  .copy-btn.copied { background: var(--green-bg); color: var(--green); border-color: rgba(20,83,45,.2); }
+
+  .post-text {
+    font-size: 14px; font-weight: 300; line-height: 1.8;
+    color: var(--ink); white-space: pre-wrap;
+  }
+  .char-badge {
+    margin-top: 10px; font-size: 11px; color: var(--ink3);
+    border-top: 1px solid var(--border); padding-top: 8px;
+  }
+
+  /* ERROR */
+  .err {
+    background: #FEF2F2; border: 1px solid rgba(220,38,38,.2);
+    border-radius: var(--radius); padding: 12px 16px;
+    font-size: 13px; color: #991B1B; margin-top: 1rem;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: 12px; color: var(--ink3);
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--ink2); text-decoration: underline; }
+
+  /* SVG icons inline */
+  .ico { width: 15px; height: 15px; display: inline-block; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem; }
+    .hero { padding: 2.5rem 1rem 2rem; }
+    main { padding: 1.5rem 1rem 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Founder<span>Story</span></div>
+  <span class="nav-badge">Free during beta</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">LinkedIn content for founders</div>
+  <h1>Your startup update,<br><em>turned into a story.</em></h1>
+  <p>Paste what happened — raw and unpolished. Get 3 LinkedIn posts that actually sound like you.</p>
+  <div class="hero-formats">
+    <span class="format-pill">📖 Story hook</span>
+    <span class="format-pill">💡 Lessons thread</span>
+    <span class="format-pill">🔍 Behind the scenes</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- Step 1 -->
+  <div class="card">
+    <div class="step-row">
+      <span class="step-num">1</span>
+      <span class="step-title">What happened?</span>
+      <span class="step-hint">Write it raw — don't polish</span>
+    </div>
+    <textarea id="update" rows="6" placeholder="e.g. We just hit 500 users this week. It took 4 months, 2 pivots, and one near-shutdown moment. Most users came from one Reddit post, not our launch campaign..."></textarea>
+    <div class="char-row">
+      <span class="char-hint" id="ccount">0 characters</span>
+      <span class="char-hint">More context = better posts</span>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="card">
+    <div class="step-row">
+      <span class="step-num">2</span>
+      <span class="step-title">What kind of update is this?</span>
+    </div>
+    <div class="chips">
+      <button class="chip" data-v="milestone" onclick="pick(this)">🏆 Milestone</button>
+      <button class="chip" data-v="lesson" onclick="pick(this)">💡 Lesson learned</button>
+      <button class="chip" data-v="failure" onclick="pick(this)">🔥 Failure / setback</button>
+      <button class="chip" data-v="launch" onclick="pick(this)">🚀 Launch / ship</button>
+      <button class="chip" data-v="insight" onclick="pick(this)">👁 Surprising insight</button>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="card">
+    <div class="step-row">
+      <span class="step-num">3</span>
+      <span class="step-title">Your writing voice</span>
+    </div>
+    <div class="chips">
+      <button class="chip on" data-t="Direct & honest" onclick="setTone(this)">Direct & honest</button>
+      <button class="chip" data-t="Warm & personal" onclick="setTone(this)">Warm & personal</button>
+      <button class="chip" data-t="Bold & provocative" onclick="setTone(this)">Bold & provocative</button>
+      <button class="chip" data-t="Humble & reflective" onclick="setTone(this)">Humble & reflective</button>
+    </div>
+  </div>
+
+  <button class="gen-btn" id="genBtn" onclick="generate()">
+    <svg class="ico" viewBox="0 0 24 24"><path d="M12 3v3m6.36 1.64-2.12 2.12M21 12h-3m-1.64 6.36-2.12-2.12M12 21v-3m-6.36-1.64 2.12-2.12M3 12h3m1.64-6.36 2.12 2.12"/></svg>
+    Generate 3 LinkedIn posts
+  </button>
+
+  <div id="out"></div>
+
+</main>
+
+<footer>
+  Built for founders who are too busy to write. &nbsp;·&nbsp; Free during beta &nbsp;·&nbsp; 
+  <a href="mailto:hello@founderstory.co">Feedback?</a>
+</footer>
+
+<script>
+const ANTHROPIC_API_KEY = "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";
+
+let selType = null, selTone = "Direct & honest";
+const ta = document.getElementById("update");
+ta.addEventListener("input", () => {
+  document.getElementById("ccount").textContent = ta.value.length + " characters";
+});
+
+function pick(el) {
+  document.querySelectorAll(".chip[data-v]").forEach(c => c.classList.remove("on"));
+  el.classList.add("on"); selType = el.dataset.v;
+}
+function setTone(el) {
+  document.querySelectorAll(".chip[data-t]").forEach(c => c.classList.remove("on"));
+  el.classList.add("on"); selTone = el.dataset.t;
+}
+
+const typeLabels = {
+  milestone: "celebrating a milestone",
+  lesson: "sharing a lesson learned",
+  failure: "being honest about a failure or setback",
+  launch: "announcing a launch or ship",
+  insight: "sharing a surprising insight"
+};
+
+async function generate() {
+  const update = ta.value.trim();
+  if (update.length < 40) {
+    document.getElementById("out").innerHTML = '<div class="err">Please write at least a sentence or two about what happened.</div>';
+    return;
+  }
+  if (!selType) {
+    document.getElementById("out").innerHTML = '<div class="err">Please select what kind of update this is.</div>';
+    return;
+  }
+
+  const btn = document.getElementById("genBtn");
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin">⟳</span> Writing your posts...`;
+  document.getElementById("out").innerHTML = '';
+
+  const prompt = `You are an expert LinkedIn ghostwriter for founders. Write 3 LinkedIn posts based on this founder's update.
+
+FOUNDER UPDATE:
+${update}
+
+UPDATE TYPE: ${typeLabels[selType]}
+VOICE/TONE: ${selTone}
+
+Write exactly 3 posts:
+
+1. STORY HOOK — One punchy opening line that stops the scroll. Tells the story with tension and a clear arc. Ends with the key insight or takeaway. Short paragraphs, line breaks for breathing room.
+
+2. LESSONS THREAD — Starts with "X things I learned from [specific thing]:" followed by 3-5 numbered lessons. Each lesson is 1-2 sentences. Specific and actionable, not vague.
+
+3. BEHIND THE SCENES — Opens with the messy, honest reality. Shows what nobody talks about publicly. A little vulnerable but not cringe. Ends with one forward-looking sentence.
+
+STRICT RULES:
+- Each post must be under 1300 characters
+- No openings like "I'm excited to share", "Thrilled to announce", "Grateful to"
+- No more than 2 hashtags per post (only if genuinely useful)
+- Sound like a real founder talking to peers, not a PR team
+- Use line breaks — short paragraphs only, never long blocks
+- Use specific numbers, names, or details from the update wherever possible
+
+Return ONLY a valid JSON object, no markdown fences, no explanation:
+{"posts":[{"format":"Story hook","post":"..."},{"format":"Lessons thread","post":"..."},{"format":"Behind the scenes","post":"..."}]}`;
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1500,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || "API error");
+
+    const raw = data.content.map(i => i.text || "").join("").replace(/```json|```/g, "").trim();
+    const parsed = JSON.parse(raw);
+
+    const badges = [
+      { cls: "b-story", label: "Story hook" },
+      { cls: "b-lesson", label: "Lessons thread" },
+      { cls: "b-behind", label: "Behind the scenes" }
+    ];
+
+    let html = '<div class="results"><div class="results-header">3 posts ready — copy to LinkedIn</div>';
+    parsed.posts.forEach((p, i) => {
+      const len = p.post.length;
+      const lenColor = len > 1200 ? "#991B1B" : "#14532D";
+      html += `
+      <div class="post-card">
+        <div class="post-top">
+          <span class="badge ${badges[i].cls}">${badges[i].label}</span>
+          <button class="copy-btn" id="cbtn${i}" onclick="cp(this,${i})">
+            <svg class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <div class="post-text" id="pt${i}">${p.post}</div>
+        <div class="char-badge" style="color:${lenColor}">${len} characters</div>
+      </div>`;
+    });
+    html += '</div>';
+    document.getElementById("out").innerHTML = html;
+
+  } catch (e) {
+    document.getElementById("out").innerHTML = `<div class="err">Something went wrong: ${e.message}. Please try again.</div>`;
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = `<svg class="ico" viewBox="0 0 24 24"><path d="M12 3v3m6.36 1.64-2.12 2.12M21 12h-3m-1.64 6.36-2.12-2.12M12 21v-3m-6.36-1.64 2.12-2.12M3 12h3m1.64-6.36 2.12 2.12"/></svg> Generate 3 LinkedIn posts`;
+}
+
+function cp(btn, i) {
+  const text = document.getElementById("pt" + i).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add("copied");
+    btn.innerHTML = `<svg class="ico" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Copied!`;
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      btn.innerHTML = `<svg class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+    }, 2500);
+  });
+}
+</script>
+</body>
+</html>
