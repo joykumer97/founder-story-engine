@@ -184,11 +184,11 @@ async function generate() {
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1500, messages: [{ role: "user", content: prompt }] })
+      body: JSON.stringify({ prompt })
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error?.message || "API error");
-    const raw = data.content.map(i => i.text || "").join("").replace(/```json|```/g, "").trim();
+    if (!res.ok) throw new Error(data.error || "API error");
+    const raw = (data.text || "").replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(raw);
     const badges = [{ cls:"b-story", label:"Story hook" }, { cls:"b-lesson", label:"Lessons thread" }, { cls:"b-behind", label:"Behind the scenes" }];
     let html = '<div class="results"><div class="results-header">3 posts ready — copy to LinkedIn</div>';
